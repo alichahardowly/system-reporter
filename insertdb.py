@@ -13,4 +13,4 @@ def information():
 while True:
     information()
     print("Inserting to database succeeded...")
-    time.sleep(1)
+    time.sleep(60)
