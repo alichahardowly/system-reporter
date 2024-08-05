@@ -53,7 +53,7 @@ class database_for_details:
             print("error in insert to database")
             connection.rollback() 
     #read information
-    def list_of_information(result):
+    def list_of_information(self,result):
         c=[]
         for record in result:
             cat_dict={}
@@ -81,6 +81,3 @@ class database_for_details:
         except:
             connection.rollback()
             print("Selecting from database failed...")
-x=database_for_details("pcRamDetails","postgres","1234","127.0.0.1","5432")     
-xx=x.list_of_information()  
-print(xx)
