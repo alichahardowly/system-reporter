@@ -1,14 +1,14 @@
 import psycopg2
 import time
-from backend import pc_details
 #connection to data base function
-class database_for_details:
-    def __init__(self,database,user,password,host,port) -> None:
+class DatabaseForDetails:
+    def __init__(self,database,user,password,host,port,table_name) -> None:
         self.database=database
         self.user=user
         self.password=password
         self.host=host
         self.port=port
+        self.table_name=table_name
     def connection(self):
         try:
             connection = psycopg2.connect(database=self.database,
@@ -26,8 +26,8 @@ class database_for_details:
         try:
             connection=self.connection()
             cur = connection.cursor()
-            cur.execute("""
-                CREATE TABLE IF NOT EXISTS pc_ram_detail(
+            cur.execute(f"""
+                CREATE TABLE IF NOT EXISTS {self.table_name}(
                 id SERIAL PRIMARY KEY,
                 timestamp VARCHAR (50) NOT NULL,
                 total VARCHAR (50) NOT NULL,
@@ -46,7 +46,7 @@ class database_for_details:
         try:
             connection=self.connection()
             cur = connection.cursor()
-            insert_comm = """INSERT INTO pc_ram_detail (timestamp,total,free,used) VALUES (%s,%s,%s,%s);"""
+            insert_comm = f"""INSERT INTO {self.table_name}(timestamp,total,free,used) VALUES (%s,%s,%s,%s);"""
             cur.execute(insert_comm,(timestamp,total,free,used))
             connection.commit()
         except:
@@ -67,8 +67,8 @@ class database_for_details:
         try:
             connection=self.connection()
             cur = connection.cursor()
-            command = """
-                SELECT * FROM pc_ram_detail ORDER BY timestamp DESC LIMIT %s;
+            command = f"""
+                SELECT * FROM {self.table_name} ORDER BY timestamp DESC LIMIT %s;
                 """
             cur.execute(command,(n,))
         
